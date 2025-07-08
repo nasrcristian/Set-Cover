@@ -75,7 +75,6 @@ def dinamica_bottom_up(conjunto_universal, subconjuntos):
     dp = [[]] * (len(subconjuntos) + 1) # Tabulación de 1, con listas vacías
     dp[0] = [[0, set()]]  # Caso base, no se usa ningún subconjunto
 
-    print(len(subconjuntos))
     for i in range(1, len(dp)): # Por cada subconjunto, pruebo las combinaciones de i, y los subconjuntos de i - 1, recursivamente
         soluciones_anteriores = dp[i - 1]
         subconjunto = subconjuntos[i - 1] 
