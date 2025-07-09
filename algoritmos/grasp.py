@@ -3,7 +3,7 @@ import random
 def grasp(conjunto_universal, subconjuntos, cantidad_iteraciones):
     # Empiezo con conjunto infinito
     mejor_solucion = float('inf'), set(), [] # Inicializo con solución infinita para que sea reemplazada
-    for i in range(cantidad_iteraciones):
+    for _ in range(cantidad_iteraciones):
         candidato = construccion_aleatorizada(subconjuntos)
         solucion_inicial = conjunto_universal.difference(candidato)
         subsets_usados = [candidato]
@@ -35,7 +35,7 @@ def grasp_aleatorio(conjunto_universal, subconjuntos, cantidad_iteraciones, alph
     # Empiezo con conjunto infinito
     lista_restricta_candidatos = mejores_candidatos(subconjuntos, alpha)
     mejor_solucion = float('inf'), set() # Inicializo con solución infinita para que sea reemplazada
-    for i in range(cantidad_iteraciones):  # Realizamos 10 iteraciones para encontrar la mejor solución
+    for _ in range(cantidad_iteraciones):  # Realizamos 10 iteraciones para encontrar la mejor solución
         candidato = random.choice(lista_restricta_candidatos)
         solucion_inicial = conjunto_universal.difference(candidato) # Elegimos una solución al azar
         subsets_usados = [candidato]
