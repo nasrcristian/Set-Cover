@@ -34,7 +34,7 @@ def construccion_aleatorizada(subconjuntos):
 def grasp_aleatorio(conjunto_universal, subconjuntos, alpha = 0.6):
     # Empiezo con conjunto infinito
     mejor_solucion = float('inf'), set() # Inicializo con solución infinita para que sea reemplazada
-    for i in range(1):  # Realizamos 10 iteraciones para encontrar la mejor solución
+    for i in range(10):  # Realizamos 10 iteraciones para encontrar la mejor solución
         lista_restricta_candidatos = mejores_candidatos(subconjuntos, alpha)
         candidato = random.choice(lista_restricta_candidatos)
         solucion_inicial = conjunto_universal.difference(candidato) # Elegimos una solución al azar
