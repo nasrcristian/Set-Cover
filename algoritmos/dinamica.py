@@ -1,10 +1,10 @@
 def dinamica_recursiva(conjunto_universal, subconjuntos):
-    soluciones = dinamica_recursiva_acc(conjunto_universal, set(), subconjuntos, 0, 0)
+    soluciones = dinamica_recursiva_acc(conjunto_universal, set(), subconjuntos, 0, 0, [])
     return soluciones[0] if soluciones else []
 
-def dinamica_recursiva_acc(conjunto_universal, subconjunto_solucion, subconjuntos, i, subconjuntos_usados):
+def dinamica_recursiva_acc(conjunto_universal, subconjunto_solucion, subconjuntos, i, cant_subconjuntos_usados, subconjuntos_usados):
     if(i == len(subconjuntos)):
-        return [(subconjuntos_usados, subconjunto_solucion)] if subconjunto_solucion == conjunto_universal else []  # Caso base
+        return [(cant_subconjuntos_usados, subconjuntos_usados, subconjunto_solucion)] if subconjunto_solucion == conjunto_universal else []  # Caso base
 
     subconjunto = subconjuntos[i]
 
@@ -13,7 +13,8 @@ def dinamica_recursiva_acc(conjunto_universal, subconjunto_solucion, subconjunto
         subconjunto_solucion.union(subconjunto), 
         subconjuntos, 
         i + 1,
-        subconjuntos_usados + 1
+        cant_subconjuntos_usados + 1,
+        subconjuntos_usados + [subconjunto]
     )
 
     no_lo_uso_subconjunto = dinamica_recursiva_acc(
@@ -21,6 +22,7 @@ def dinamica_recursiva_acc(conjunto_universal, subconjunto_solucion, subconjunto
         subconjunto_solucion, 
         subconjuntos, 
         i + 1,
+        cant_subconjuntos_usados,
         subconjuntos_usados
     )
 
@@ -40,7 +42,7 @@ def dinamica_recursiva_con_memoizacion(conjunto_universal, subconjuntos):
 
 def dinamica_recursiva_con_memoizacion_acc(conjunto_universal, subconjuntos, i, memoized):
     if(i == len(subconjuntos) - 1): # Caso base, recorrí todos los subconjuntos
-        solucion = [[1, subconjuntos[i]], [0, set()]]
+        solucion = [[1, subconjuntos[i], [subconjuntos[i]]], [0, set(), []]]
         memoized[i] = solucion # Guardo el caso base
         return solucion
 
@@ -63,7 +65,8 @@ def dinamica_recursiva_con_memoizacion_acc(conjunto_universal, subconjuntos, i, 
         memoized
     )
 
-    lo_uso_subconjunto_con_subconjunto_actual = list(map(lambda x: [x[0] + 1, x[1].union(subconjunto)], lo_uso_subconjunto))
+    lo_uso_subconjunto_con_subconjunto_actual = list(
+        map(lambda x: [x[0] + 1, x[1].union(subconjunto), x[2] + [subconjunto]], lo_uso_subconjunto))
 
     soluciones = no_lo_uso_subconjunto + lo_uso_subconjunto_con_subconjunto_actual
 
@@ -73,12 +76,13 @@ def dinamica_recursiva_con_memoizacion_acc(conjunto_universal, subconjuntos, i, 
 
 def dinamica_bottom_up(conjunto_universal, subconjuntos):
     dp = [[]] * (len(subconjuntos) + 1) # Tabulación de 1, con listas vacías
-    dp[0] = [[0, set()]]  # Caso base, no se usa ningún subconjunto
+    dp[0] = [[0, set(), []]]  # Caso base, no se usa ningún subconjunto
 
     for i in range(1, len(dp)): # Por cada subconjunto, pruebo las combinaciones de i, y los subconjuntos de i - 1, recursivamente
         soluciones_anteriores = dp[i - 1]
         subconjunto = subconjuntos[i - 1] 
-        dp[i] = soluciones_anteriores + list(map(lambda x: [x[0] + 1, x[1].union(subconjunto)], soluciones_anteriores))
+        dp[i] = soluciones_anteriores + list(
+            map(lambda x: [x[0] + 1, x[1].union(subconjunto), x[2] + [subconjunto]], soluciones_anteriores))
 
     soluciones_universales = filter(lambda x: x[1] == conjunto_universal, dp[len(subconjuntos)])
     return min(soluciones_universales, key=lambda x: x[0]) # Devuelvo la solución con menos subconjuntos usados, igual a universal
