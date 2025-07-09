@@ -1,15 +1,15 @@
 import random
 
-def grasp(conjunto_universal, subconjuntos):
+def grasp(conjunto_universal, subconjuntos, cantidad_iteraciones):
     # Empiezo con conjunto infinito
     mejor_solucion = float('inf'), set(), [] # Inicializo con solución infinita para que sea reemplazada
-    for i in range(10):  # Realizamos 10 iteraciones para encontrar la mejor solución
+    for _ in range(cantidad_iteraciones):
         candidato = construccion_aleatorizada(subconjuntos)
         solucion_inicial = conjunto_universal.difference(candidato)
         subsets_usados = [candidato]
-        cantidad_iteraciones = min(len(subconjuntos), len(conjunto_universal)) # Itero el minimo entre la cantidad de subconjuntos y el tamaño del conjunto universal
+        cantidad_iteraciones = min(len(subconjuntos), len(conjunto_universal))
         i = 0
-        while(i < cantidad_iteraciones and len(solucion_inicial) > 0):
+        while(len(solucion_inicial) > 0):
             solucion_vecino = solucion_inicial.difference(subconjuntos[i])
             mejor_vecino = subconjuntos[i]
             for j in range(len(subconjuntos)): # La vecindad es el tamaño de la lista de subconjuntos
@@ -31,17 +31,16 @@ def construccion_aleatorizada(subconjuntos):
     subconjunto_aleatorio = random.choice(subconjuntos)  # Elegimos un subconjunto aleatorio
     return subconjunto_aleatorio
 
-def grasp_aleatorio(conjunto_universal, subconjuntos, alpha = 0.6):
+def grasp_aleatorio(conjunto_universal, subconjuntos, cantidad_iteraciones, alpha = 0.6):
     # Empiezo con conjunto infinito
+    lista_restricta_candidatos = mejores_candidatos(subconjuntos, alpha)
     mejor_solucion = float('inf'), set() # Inicializo con solución infinita para que sea reemplazada
-    for i in range(10):  # Realizamos 10 iteraciones para encontrar la mejor solución
-        lista_restricta_candidatos = mejores_candidatos(subconjuntos, alpha)
+    for _ in range(cantidad_iteraciones):  # Realizamos 10 iteraciones para encontrar la mejor solución
         candidato = random.choice(lista_restricta_candidatos)
         solucion_inicial = conjunto_universal.difference(candidato) # Elegimos una solución al azar
         subsets_usados = [candidato]
-        cantidad_iteraciones = min(len(subconjuntos), len(conjunto_universal)) # Itero el minimo entre la cantidad de subconjuntos y el tamaño del conjunto universal
         i = 0
-        while(i < cantidad_iteraciones and len(solucion_inicial) > 0):
+        while(len(solucion_inicial) > 0):
             solucion_vecino = solucion_inicial.difference(subconjuntos[i])
             mejor_vecino = subconjuntos[i]
             for j in range(len(subconjuntos)): # La vecindad es el tamaño de la lista de subconjuntos
