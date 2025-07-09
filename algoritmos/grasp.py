@@ -4,7 +4,7 @@ def grasp(conjunto_universal, subconjuntos):
     # Empiezo con conjunto infinito
     mejor_solucion = float('inf'), set(), [] # Inicializo con solución infinita para que sea reemplazada
     for i in range(10):  # Realizamos 10 iteraciones para encontrar la mejor solución
-        candidato = construccion_aleatorizada(conjunto_universal, subconjuntos)
+        candidato = construccion_aleatorizada(subconjuntos)
         solucion_inicial = conjunto_universal.difference(candidato)
         subsets_usados = [candidato]
         cantidad_iteraciones = min(len(subconjuntos), len(conjunto_universal)) # Itero el minimo entre la cantidad de subconjuntos y el tamaño del conjunto universal
@@ -21,17 +21,17 @@ def grasp(conjunto_universal, subconjuntos):
             solucion_inicial = solucion_vecino
             subsets_usados.append(mejor_vecino)
             i += 1
-        if(len(subsets_usados) < len(mejor_solucion[0])): # Elijo la mejor solución entre la previamente guardada y la de esta iteración
+        if(len(subsets_usados) < mejor_solucion[0]): # Elijo la mejor solución entre la previamente guardada y la de esta iteración
             mejor_solucion = len(subsets_usados), solucion_inicial, subsets_usados
         
     return len(subsets_usados), subsets_usados, conjunto_universal.difference(solucion_inicial)
 
 # Elegimos un subconjunto al azar
-def construccion_aleatorizada(conjunto_universal, subconjuntos):
+def construccion_aleatorizada(subconjuntos):
     subconjunto_aleatorio = random.choice(subconjuntos)  # Elegimos un subconjunto aleatorio
-    return conjunto_universal.difference(subconjunto_aleatorio)
+    return subconjunto_aleatorio
 
-def grasp_aleatorio(conjunto_universal, subconjuntos, alpha):
+def grasp_aleatorio(conjunto_universal, subconjuntos, alpha = 0.6):
     # Empiezo con conjunto infinito
     mejor_solucion = float('inf'), set() # Inicializo con solución infinita para que sea reemplazada
     for i in range(1):  # Realizamos 10 iteraciones para encontrar la mejor solución

@@ -33,7 +33,7 @@ def dinamica_recursiva_acc(conjunto_universal, subconjunto_solucion, subconjunto
 
     return [min(soluciones, key=lambda x: x[0], default=[])]
 
-# Dinámica con memoización
+# Dinámica con memoización Top Down
 def dinamica_recursiva_con_memoizacion(conjunto_universal, subconjuntos):
     memoized = [None] * len(subconjuntos)
     soluciones = dinamica_recursiva_con_memoizacion_acc(conjunto_universal, subconjuntos, 0, memoized)
@@ -74,6 +74,8 @@ def dinamica_recursiva_con_memoizacion_acc(conjunto_universal, subconjuntos, i, 
 
     return soluciones
 
+
+# Dinamica Bottom Up
 def dinamica_bottom_up(conjunto_universal, subconjuntos):
     dp = [[]] * (len(subconjuntos) + 1) # Tabulación de 1, con listas vacías
     dp[0] = [[0, set(), []]]  # Caso base, no se usa ningún subconjunto

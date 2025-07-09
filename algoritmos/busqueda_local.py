@@ -3,11 +3,11 @@
 # que mejora, mejor entre todos, etc.
 
 # Criterio de elección: Mejor entre todos de toda la lista de subconjuntos
-def busqueda_local(conjunto_universal, subconjuntos):
+def busqueda_local(conjunto_universal, subconjuntos, iteraciones = float('inf')):
     elemento_inicial = max(subconjuntos, key=len) # Empiezo con el subconjunto que mas elementos tiene
     solucion_inicial = conjunto_universal.difference(elemento_inicial) # Usamos diferencia de conjuntos ya que al iterar, es mas rapido hacer comparaciones
-    subsets_usados = []
-    cantidad_iteraciones = min(len(subconjuntos), len(conjunto_universal)) # Itero el minimo entre la cantidad de subconjuntos y el tamaño del conjunto universal
+    subsets_usados = [elemento_inicial]
+    cantidad_iteraciones = min(len(subconjuntos), len(conjunto_universal), iteraciones) # Itero el minimo entre la cantidad de subconjuntos y el tamaño del conjunto universal
     i = 0
     while(i < cantidad_iteraciones and len(solucion_inicial) > 0):
         solucion_vecino = solucion_inicial.difference(subconjuntos[i])
@@ -24,11 +24,11 @@ def busqueda_local(conjunto_universal, subconjuntos):
     return len(subsets_usados), subsets_usados, conjunto_universal.difference(solucion_inicial)
 
 # Criterio de elección: Primero que mejore la solución
-def busqueda_local_con_primera_solucion(conjunto_universal, subconjuntos):
+def busqueda_local_con_primera_solucion(conjunto_universal, subconjuntos, iteraciones = float('inf')):
     elemento_inicial = max(subconjuntos, key=len) # Empiezo con el subconjunto que mas elementos tiene
     solucion_inicial = conjunto_universal.difference(elemento_inicial) # Usamos diferencia de conjuntos ya que al iterar, es mas rapido hacer comparaciones
-    subsets_usados = []
-    cantidad_iteraciones = min(len(subconjuntos), len(conjunto_universal)) # Itero el minimo entre la cantidad de subconjuntos y el tamaño del conjunto universal
+    subsets_usados = [elemento_inicial]
+    cantidad_iteraciones = min(len(subconjuntos), len(conjunto_universal), iteraciones) # Itero el minimo entre la cantidad de subconjuntos y el tamaño del conjunto universal
     i = 0
     while(i < cantidad_iteraciones and len(solucion_inicial) > 0):
         vecino = subconjuntos[i]
