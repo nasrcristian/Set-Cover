@@ -1,4 +1,4 @@
-# Nombre del Proyecto
+# Set Cover
 
 Este proyecto implementa y compara el rendimiento de varios algoritmos para resolver el problema de cobertura de conjuntos.
 
