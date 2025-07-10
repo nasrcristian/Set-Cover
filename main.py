@@ -1,26 +1,65 @@
-from algoritmos.dinamica import dinamica_recursiva, dinamica_recursiva_con_memoizacion, dinamica_bottom_up
-from algoritmos.busqueda_local import busqueda_local, busqueda_local_con_primera_solucion
+from benchmarking.benchmark import benchmark
 from algoritmos.grasp import grasp, grasp_aleatorio
+import csv
+import matplotlib.pyplot as plt
+import numpy as np
 
-soluciones = [(    {100, 101, 102, 103, 104, 105},
-    [{100, 101}, {102, 103}, {104}, {105}, {100, 102}, {101, 104}, {103, 105}, {100, 105}, {101, 103}, {102}, {104, 105}]
-), ( {10, 11, 12, 13, 14, 15},
-    [{10, 11}, {12, 13}, {14}, {15}, {10, 12}, {11, 13}, {14, 15}, {10, 14}, {12, 15}, {11, 12}, {13}, {15}]
-), ( {21, 22, 23, 24, 25, 26, 27},
-    [{21, 22}, {23, 24, 25}, {26}, {27}, {22, 23, 26}, {21, 25}, {24, 26, 27}, {23, 27}, {21}, {22, 24}]
-), (  {100, 101, 102, 103, 104, 105},
-    [{100, 101}, {102, 103}, {104}, {105}, {100, 102}, {101, 104}, {103, 105}, {100, 105}, {101, 103}, {102}, {104, 105}]
-), (  {31, 32, 33, 34, 35, 36},
-    [{31, 32, 33}, {34, 35}, {36}, {31, 34}, {32, 35}, {33, 36}, {31, 36}, {32, 33, 34}, {35, 36}, {31}]
-)]
 
+archivo_entrada = "benchmarking/in/data.csv"
+out_folder = "benchmarking/out/"
+
+alphas = []
+for i in range(4):
+    alphas.append(0.6 + i / 10)
+
+def graficar(datos , alpha):
+
+    iteraciones = []
+    precisiones = []
+
+    for dato in datos:
+        try:
+            with open(dato[0], mode='r', newline='') as file:
+                rows = list(csv.reader(file))
+                for row in reversed(rows):
+                    if row and row[0] == "promedio_precision_porcentual":
+                        promedio = float(row[1])
+                        iteraciones.append(int(dato[1]))
+                        precisiones.append(float(promedio))
+                        print(f"{file}: {promedio:.2f}% precisión")
+                        break
+        except Exception as e:
+            print(f"Error leyendo {file}: {e}")
+
+    iteraciones = np.array(iteraciones)
+    precisiones = np.array(precisiones)
+
+    print(iteraciones, precisiones)
+    plt.bar(iteraciones, precisiones, width=40, color='purple')
+    plt.xlim(20, 1100)
+    plt.ylim(min(precisiones) - 5, 100)
+
+    # Decoración
+    plt.title("Precisión promedio de GRASP vs Iteraciones con alpha: " + str(alpha))
+    plt.xlabel("Iteraciones (α)")
+    plt.ylabel("Precisión promedio (%)")
+    plt.xticks(iteraciones)
+    plt.grid(axis='y')
+
+    # Guardar el gráfico
+    nombre_archivo = "benchmarking/out/grafico_barras_precision_alpha_" + str(alpha * 10) + ".jpg"
+    plt.savefig(nombre_archivo)
+    plt.close()
+
+    print(f"✅ Gráfico guardado como: {nombre_archivo}")
+
+iteraciones = [50, 100, 200, 400, 500, 1000]
 
 if __name__ == "__main__":
-    for sol in soluciones:
-        print("usando universo:", sol[0], " con subconjuntos:", sol[1])
-        print(
-        "busqueda local con mejor solucion",
-            busqueda_local(sol[0], sol[1]))
-        print(
-        "busqueda local con primera solucion",   
-        busqueda_local_con_primera_solucion(sol[0], sol[1]))
+    for alpha in alphas:
+        datos = []
+        for it in iteraciones:
+            out_file = out_folder + "benchmark_grasp_aleatorio_" + str(alpha * 10) + "_iteraciones_" + str(it) + ".csv"
+            #benchmark(archivo_entrada, out_file, lambda x, y: grasp_aleatorio(x, y, 2000, alpha))
+            datos.append((out_file, it))
+        graficar(datos, alpha)
