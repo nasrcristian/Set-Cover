@@ -1,5 +1,5 @@
 from benchmarking.benchmark import benchmark
-from algoritmos.grasp import grasp, grasp_aleatorio
+from algoritmos.grasp import grasp_aleatorio
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
@@ -39,14 +39,12 @@ def graficar(datos , alpha):
     plt.xlim(20, 1100)
     plt.ylim(min(precisiones) - 5, 100)
 
-    # Decoración
     plt.title("Precisión promedio de GRASP vs Iteraciones con alpha: " + str(alpha))
     plt.xlabel("Iteraciones (α)")
     plt.ylabel("Precisión promedio (%)")
     plt.xticks(iteraciones)
     plt.grid(axis='y')
 
-    # Guardar el gráfico
     nombre_archivo = "benchmarking/out/grafico_barras_precision_alpha_" + str(alpha * 10) + ".jpg"
     plt.savefig(nombre_archivo)
     plt.close()
@@ -60,6 +58,6 @@ if __name__ == "__main__":
         datos = []
         for it in iteraciones:
             out_file = out_folder + "benchmark_grasp_aleatorio_" + str(alpha * 10) + "_iteraciones_" + str(it) + ".csv"
-            #benchmark(archivo_entrada, out_file, lambda x, y: grasp_aleatorio(x, y, 2000, alpha))
+            benchmark(archivo_entrada, out_file, lambda x, y: grasp_aleatorio(x, y, 2000, alpha))
             datos.append((out_file, it))
         graficar(datos, alpha)

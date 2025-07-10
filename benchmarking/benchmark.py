@@ -2,7 +2,7 @@ import csv
 import ast
 
 def benchmark(archivo_entrada: str, archivo_salida: str, algoritmo):
-    # Acumuladores
+
     resultados = []
     precisiones = []
 
@@ -16,7 +16,6 @@ def benchmark(archivo_entrada: str, archivo_salida: str, algoritmo):
 
                 grasp_resultado = algoritmo(U, subconjuntos)[0]
 
-                # Evitar división por cero (solo si grasp_resultado lo fuera)
                 if grasp_resultado == 0:
                     precision = 0.0
                 else:
@@ -28,10 +27,8 @@ def benchmark(archivo_entrada: str, archivo_salida: str, algoritmo):
             except Exception as e:
                 print(f"⚠️ Error procesando fila: {e}")
 
-    # Cálculo del promedio de precisión
     promedio_precision = sum(precisiones) / len(precisiones)
 
-    # Guardar CSV de salida
     with open(archivo_salida, mode='w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["grasp_resultado", "precision_porcentual"])
@@ -39,7 +36,7 @@ def benchmark(archivo_entrada: str, archivo_salida: str, algoritmo):
         for grasp_resultado, precision in resultados:
             writer.writerow([grasp_resultado, precision])
 
-        writer.writerow([])  # línea vacía
+        writer.writerow([]) 
         writer.writerow(["promedio_precision_porcentual", round(promedio_precision, 2)])
 
     print(f"✅ Archivo generado: {archivo_salida}")

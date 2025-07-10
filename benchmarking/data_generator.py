@@ -2,9 +2,6 @@ import csv
 import random
 from algoritmos.dinamica import dinamica_bottom_up
 
-# Esta es una función dummy, reemplazala por tu implementación real  
-
-# Generador de una instancia aleatoria de Set Cover
 def generar_instancia(tam_min=10, tam_max=50, num_subconjuntos_max=22):
     tam_universal = random.randint(tam_min, tam_max)
     U = set(range(1, tam_universal + 1))
@@ -20,7 +17,6 @@ def generar_instancia(tam_min=10, tam_max=50, num_subconjuntos_max=22):
         if elementos_cubiertos == U:
             break
 
-    # Asegurarse de cubrir todos los elementos
     faltantes = U - elementos_cubiertos
     while faltantes:
         sub_len = min(3, len(faltantes))
@@ -30,14 +26,11 @@ def generar_instancia(tam_min=10, tam_max=50, num_subconjuntos_max=22):
         faltantes = U - elementos_cubiertos
     return U, subconjuntos
 
-# Generar 50 instancias
 num_instancias = 50
 instancias = [generar_instancia() for _ in range(num_instancias)]
 
-# Archivo de salida
 output_file = "resultados_experimento.csv"
 
-# Guardar en CSV
 with open(output_file, mode='w', newline='') as file:
     writer = csv.writer(file)
     writer.writerow(["min_cant_subconjuntos", "conjunto_universal", "lista_subconjuntos"])
