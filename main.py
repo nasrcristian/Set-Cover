@@ -1,5 +1,5 @@
 from benchmarking.benchmark import benchmark
-from algoritmos.grasp import grasp_aleatorio
+from algoritmos.grasp import grasp_aleatorio, grasp
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
@@ -54,6 +54,7 @@ def graficar(datos , alpha):
 iteraciones = [50, 100, 200, 400, 500, 1000]
 
 if __name__ == "__main__":
+    benchmark(archivo_entrada, out_folder + "benchmark_grasp.csv", lambda x, y: grasp(x, y, 200))
     for alpha in alphas:
         datos = []
         for it in iteraciones:
